@@ -11,11 +11,11 @@ public class WorldMapManager : MonoBehaviour
     {
         currentOvermap = new WorldMap(50, 50);
     }
-    public Vector2Serializable GrabCenter()
+    public Vector2IntSerializable GrabCenter()
     {
         return currentOvermap.GrabStartCell();
     }
-    public void CreateNewOvermap(Vector2Serializable playerCurrentPosition)
+    public void CreateNewOvermap(Vector2IntSerializable playerCurrentPosition)
     {       
         overmapUI.StartNewOverMap(currentOvermap, playerCurrentPosition);
     }

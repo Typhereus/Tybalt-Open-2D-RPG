@@ -5,5 +5,5 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerCharacterData
 {
-    public Vector2Serializable currentPosition;
+    public Vector2IntSerializable currentPosition;
 }

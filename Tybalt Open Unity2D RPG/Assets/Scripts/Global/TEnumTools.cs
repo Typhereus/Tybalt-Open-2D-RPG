@@ -70,6 +70,11 @@ public class TEnumTools
         return roll;
     }
 
+    public static T GetWithString<T>(string e)
+    {
+        return (T)Enum.Parse(typeof(T), e, true);
+    }
+
     private class RandomStaticSystem
     {
         public static System.Random rng;

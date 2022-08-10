@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class WorldMap
 {
     /// <summary>
@@ -18,7 +19,7 @@ public class WorldMap
     /// For example a player might encounter a kingdom and return to it days 
     /// later to find it overtaken by an enemy race.
     /// 
-    /// The overmap is generated when instantiated
+    /// The overmap is generated when instantiated.
     /// </summary>
     
     //
@@ -29,15 +30,20 @@ public class WorldMap
     //Generate when this class is instantiated
     public void GenerateGrid()
     {
-        for (int x = 0; x < startSize.x; x++)
+        int startX = Mathf.RoundToInt(- startSize.x / 2);
+        int endX = Mathf.RoundToInt(startSize.x / 2);
+        int startY = Mathf.RoundToInt(-startSize.y / 2);
+        int endY = Mathf.RoundToInt(startSize.y / 2);
+
+        for (int x = startX; x < endX; x++)
         {
-            for (int y = 0; y < startSize.y; y++)
+            for (int y = startY; y < endY; y++)
             {
                 WorldMapCell c = new WorldMapCell(x, y);
                 cells.Add(c);
 
                 //Find center cell
-                if (x == Mathf.Round(startSize.x / 2) && y == Mathf.Round(startSize.y / 2))
+                if (x == 0 && y == 0)
                 {
                     c.startCell = true;
                     c.GenerateFirstCell();
@@ -45,7 +51,7 @@ public class WorldMap
             }
         }
     }
-    public Vector2Serializable GrabStartCell()
+    public Vector2IntSerializable GrabStartCell()
     {
         return cells.Find(x => x.startCell == true).position;
     }
@@ -59,14 +65,18 @@ public class WorldMap
 /// <summary>
 /// Cell class that contains data for each Cell Object
 /// </summary>
+[System.Serializable]
 public class WorldMapCell
 {
-    public Vector2Serializable position;
+    public string name;
+
+    public Vector2IntSerializable position;
 
     public bool startCell = false;
 
     public enum Geography
     {
+        Plains,
         Forest,
         Cliff,
         Mountain,
@@ -90,9 +100,17 @@ public class WorldMapCell
 
     public void RandomizeCell()
     {
-        geography = TEnumTools.Random<Geography>();
+        if(Random.Range(0, 10) == 0)
+        {
+            interior = TEnumTools.Random<Interior>();
+        }
+        else
+        {
+            geography = TEnumTools.Random<Geography>();
+        }
 
-        if (Random.Range(0, 5) == 0)
+
+        if (Random.Range(0, 10) == 0)
         {
             hasCivilization = true;
             civilization = new Civilization();
@@ -109,9 +127,11 @@ public class WorldMapCell
         position.x = _x;
         position.y = _y;
 
+        name = position.x + "," + position.y;
         RandomizeCell();
     }
 }
+[System.Serializable]
 public class Civilization
 {
     public enum Race
@@ -120,7 +140,6 @@ public class Civilization
         Dwarf,
         Elf,
         Undead,
-        Orc,
     }
     public Race race;
 
@@ -130,12 +149,16 @@ public class Civilization
     public void GenerateStartCell()
     {
         quality = 1;
+
+        //Random population
+        population = TRarity.ChaoticRarityPercent(.99f) * quality;
+
         race = (Race)Random.Range(0, 3);
     }
     public void GenerateRandom()
     {
         //Generate quality on a scaling rarity
-        quality = TRarity.ChaoticRarityPercent(.33f);
+        quality = 1 + TRarity.ChaoticRarityPercent(.33f);
 
         //Random Race
         race = (Race)Random.Range(0, TEnumTools.GetMax<Race>());

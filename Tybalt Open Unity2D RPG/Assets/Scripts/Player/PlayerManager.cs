@@ -10,11 +10,11 @@ public class PlayerManager : MonoBehaviour
     {
         playerCharacterData = new PlayerCharacterData();
     }
-    public void SetPlayerCurrentPosition(Vector2Serializable vector2Serializable) 
+    public void SetPlayerCurrentPosition(Vector2IntSerializable vector2Serializable) 
     {
         playerCharacterData.currentPosition = vector2Serializable;
     }
-    public Vector2Serializable GrabPlayerCurrentPosition()
+    public Vector2IntSerializable GrabPlayerCurrentPosition()
     {
         return playerCharacterData.currentPosition;
     }
