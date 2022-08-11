@@ -8,9 +8,14 @@ public class WorldUICellPrefab : MonoBehaviour
     [SerializeField] private Image interiorIcon;
     [SerializeField] private Image geographyIcon;
     [SerializeField] private Image civilizationIcon;
+    [SerializeField] private WorldMapCell worldMapCell;
 
     public string debug;
 
+    public void SetWorldCell(WorldMapCell cell)
+    {
+        worldMapCell = cell;
+    }
     public void SetGeographyIcon(Sprite sprite)
     {
         geographyIcon.sprite = sprite;
@@ -21,7 +26,7 @@ public class WorldUICellPrefab : MonoBehaviour
         interiorIcon.sprite = sprite;
         interiorIcon.color = Color.white;
     }
-    public void RaceIcon(Sprite sprite)
+    public void SetRaceIcon(Sprite sprite)
     {
         civilizationIcon.sprite = sprite;
         civilizationIcon.color = Color.white;

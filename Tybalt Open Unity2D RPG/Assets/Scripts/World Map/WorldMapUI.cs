@@ -33,9 +33,9 @@ public class WorldMapUI : MonoBehaviour
             for (int y = 0; y < Mathf.Sqrt(cellMaxAmount); y++)
             {
                 WorldMapUICell uiCell = new WorldMapUICell();
+
                 uiCell.xUIPosition = x;
                 uiCell.yUIPosition = y;
-
 
                 uiCell.UICellGameObject = Instantiate(cellUIPrefab, cellParent);
 
@@ -92,6 +92,9 @@ public class WorldMapUI : MonoBehaviour
                     //Grab ui cell and set overmap object
                     WorldMapUICell uiCell =  allUICells.Find(x => x.xUIPosition == xIterator && x.yUIPosition == yIterator);
 
+                    //Set cell
+                    uiCell.worldUIPrefab.SetWorldCell(worldMapCell);
+
                     uiCell.worldMapCell = worldMapCell;
 
                     uiCell.debugText.text = "World Pos: " + worldMapCell.position.x + "," + worldMapCell.position.y + "\n" +
@@ -107,13 +110,14 @@ public class WorldMapUI : MonoBehaviour
     }
     private void SetMapUI()
     {
+        //Set map icons
         foreach (var item in allUICells)
         {
             if(item.worldMapCell.geography != WorldMapCell.Geography.Plains)
             {
                 item.worldUIPrefab.SetGeographyIcon(worldMapIcons.GrabIconWithEnumString(item.worldMapCell.geography.ToString()));
                 item.worldUIPrefab.debug = worldMapIcons.GrabIconWithEnumString(item.worldMapCell.geography.ToString()).ToString();
-                print(item.worldMapCell.geography.ToString());
+                //print(item.worldMapCell.geography.ToString());
             }
 
             if (item.worldMapCell.interior != WorldMapCell.Interior.None)
@@ -124,7 +128,7 @@ public class WorldMapUI : MonoBehaviour
 
             if (item.worldMapCell.hasCivilization)
             {
-                item.worldUIPrefab.RaceIcon(worldMapIcons.GrabIconWithEnumString(item.worldMapCell.civilization.race.ToString()));
+                item.worldUIPrefab.SetRaceIcon(worldMapIcons.GrabIconWithEnumString(item.worldMapCell.civilization.race.ToString()));
                 //item.worldUIPrefab.debug = worldMapIcons.GrabIconWithEnumString(item.worldMapCell.civilization.race.ToString()).ToString();
             }
         }
