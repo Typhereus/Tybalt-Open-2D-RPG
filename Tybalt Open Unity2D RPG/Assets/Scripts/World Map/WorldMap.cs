@@ -30,7 +30,7 @@ public class WorldMap
     //Generate when this class is instantiated
     public void GenerateGrid()
     {
-        int startX = Mathf.RoundToInt(- startSize.x / 2);
+        int startX = Mathf.RoundToInt(-startSize.x / 2);
         int endX = Mathf.RoundToInt(startSize.x / 2);
         int startY = Mathf.RoundToInt(-startSize.y / 2);
         int endY = Mathf.RoundToInt(startSize.y / 2);
@@ -119,6 +119,7 @@ public class WorldMapCell
     }
     public void GenerateFirstCell()
     {
+        hasCivilization = true;
         civilization = new Civilization();
         civilization.GenerateStartCell();
     }

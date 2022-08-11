@@ -9,8 +9,7 @@ public class WorldMapIcons : MonoBehaviour
     /// sprite atlas index which corresponds to the icon IconType enum.
     /// Grabbing the reference to the sprite requires the index of the enum and sprite atlas sprite 
     /// order to be the same, othewise it will result in array index exceptions or null reference
-    /// </summary>
-    ///     
+    /// </summary> 
     public enum IconType
     {
         Mountain,

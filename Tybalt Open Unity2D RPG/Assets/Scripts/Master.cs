@@ -9,8 +9,8 @@ public class Master : MonoBehaviour
 
     private void Start()
     {
-        overmapManager.InitializeOvermap();
+        overmapManager.InitializeWorldMap();
         playerManager.SetPlayerCurrentPosition(overmapManager.GrabCenter());
-        overmapManager.CreateNewOvermap(playerManager.GrabPlayerCurrentPosition());
+        overmapManager.CreateNewWorldMap(playerManager.GrabPlayerCurrentPosition());
     }
 }

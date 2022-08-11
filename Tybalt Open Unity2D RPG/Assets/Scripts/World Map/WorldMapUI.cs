@@ -14,13 +14,16 @@ public class WorldMapUI : MonoBehaviour
 
     [SerializeField] private List<WorldMapUICell> allUICells = new List<WorldMapUICell>();
 
-    public void StartNewOverMap(WorldMap overmap, Vector2IntSerializable playerCurrentPosition)
+    public void StartNewWorldMap(WorldMap worldMap, Vector2IntSerializable playerCurrentPosition)
     {
         //
         SetUICellPrefabs();
 
+        //
+        SetCenterCell(worldMap);
+
         //Generate UI map around that center
-        SetOvermapCellsRelativeToPlayerPosition(overmap, playerCurrentPosition);
+        SetCellsRelativeToPlayerPosition(worldMap, playerCurrentPosition);
 
         //
         SetMapUI();
@@ -50,8 +53,8 @@ public class WorldMapUI : MonoBehaviour
             }
         }
     }
-    private void SetOvermapCellsRelativeToPlayerPosition(WorldMap overmap, Vector2IntSerializable playerCurrentPosition)
-    {        
+    private void SetCenterCell(WorldMap worldMap)
+    {
         //Grab start cell and place it in the center
         int center = Mathf.RoundToInt(Mathf.Sqrt(cellMaxAmount) / 2f) - 1;
 
@@ -64,10 +67,12 @@ public class WorldMapUI : MonoBehaviour
         centerUICell.debugText.text = "CENTER";
 
         //
-        centerUICell.worldMapCell = overmap.cells.Find(x => x.startCell == true);
+        centerUICell.worldMapCell = worldMap.cells.Find(x => x.startCell == true);
 
         print("Center world pos: " + centerUICell.worldMapCell.position.x + "," + centerUICell.worldMapCell.position.y);
-
+    }
+    private void SetCellsRelativeToPlayerPosition(WorldMap worldMap, Vector2IntSerializable playerCurrentPosition)
+    {        
         //Grab center of UI
         int uiCenter = Mathf.RoundToInt(Mathf.Sqrt(cellMaxAmount) / 2f) - 1; // (3,3)
 
@@ -76,35 +81,36 @@ public class WorldMapUI : MonoBehaviour
         {
             for (int yIterator = 0; yIterator < Mathf.Sqrt(cellMaxAmount); yIterator++)
             {
-
                 //Grab world position
                 int xWorldPosition = playerCurrentPosition.x - (uiCenter - xIterator);
                 int yWorldPosition = playerCurrentPosition.y - (uiCenter - yIterator);
 
                 //If an world overmap cell exists
-                if(overmap.cells.Exists(x => 
+                if(!worldMap.cells.Exists(x => 
                 x.position.x == xWorldPosition
                 && x.position.y == yWorldPosition))
                 {
-                    WorldMapCell worldMapCell = overmap.cells.Find(x => x.position.x == xWorldPosition
-                        && x.position.y == yWorldPosition);
-
-                    //Grab ui cell and set overmap object
-                    WorldMapUICell uiCell =  allUICells.Find(x => x.xUIPosition == xIterator && x.yUIPosition == yIterator);
-
-                    //Set cell
-                    uiCell.worldUIPrefab.SetWorldCell(worldMapCell);
-
-                    uiCell.worldMapCell = worldMapCell;
-
-                    uiCell.debugText.text = "World Pos: " + worldMapCell.position.x + "," + worldMapCell.position.y + "\n" +
-                        "UI POS: " + uiCell.xUIPosition + "," + uiCell.yUIPosition;
-                }
-                else
-                {
-                    print(xWorldPosition  + "," + yWorldPosition + " doesn't exist");
+                    print(xWorldPosition + "," + yWorldPosition + " doesn't exist");
                     //Future create
+                    continue;
                 }
+
+                //Grab world cell that corresponds to current iteration
+                WorldMapCell worldMapCell = worldMap.cells.Find(x => x.position.x == xWorldPosition
+                     && x.position.y == yWorldPosition);
+
+                //Grab ui cell that corresponds to current iteration
+                WorldMapUICell uiCell = allUICells.Find(x => x.xUIPosition == xIterator && x.yUIPosition == yIterator);
+
+                //Set cell prefab with cell data
+                uiCell.worldUIPrefab.SetWorldCell(worldMapCell);
+
+                //Set object reference
+                uiCell.worldMapCell = worldMapCell;
+
+                //Debug
+                uiCell.debugText.text = "World Pos: " + worldMapCell.position.x + "," + worldMapCell.position.y + "\n" +
+                    "UI POS: " + uiCell.xUIPosition + "," + uiCell.yUIPosition;
             }
         }
     }

@@ -4,20 +4,19 @@ using UnityEngine;
 
 public class WorldMapManager : MonoBehaviour
 {
-    [SerializeField] private WorldMapUI overmapUI;
-    [SerializeField] private WorldMap currentOvermap;
+    [SerializeField] private WorldMapUI worldMapUI;
+    [SerializeField] private WorldMap currentWorldMap;
     
-    public void InitializeOvermap()
+    public void InitializeWorldMap()
     {
-        currentOvermap = new WorldMap(50, 50);
+        currentWorldMap = new WorldMap(50, 50);
     }
     public Vector2IntSerializable GrabCenter()
     {
-        return currentOvermap.GrabStartCell();
+        return currentWorldMap.GrabStartCell();
     }
-    public void CreateNewOvermap(Vector2IntSerializable playerCurrentPosition)
+    public void CreateNewWorldMap(Vector2IntSerializable playerCurrentPosition)
     {       
-        overmapUI.StartNewOverMap(currentOvermap, playerCurrentPosition);
+        worldMapUI.StartNewWorldMap(currentWorldMap, playerCurrentPosition);
     }
-
 }
